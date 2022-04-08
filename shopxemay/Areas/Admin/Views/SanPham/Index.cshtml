@@ -1,0 +1,113 @@
+﻿@model IEnumerable<shopxemay.Models.SanPham>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">DANH SÁCH SẢN PHẨM</h1>
+
+</div>
+<!-- /.container-fluid -->
+
+
+
+<p>
+    @Html.ActionLink("Tạo Sản phẩm mới", "Create")
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                Mã Sp
+            </th>
+            
+            <th>
+                Tên SP
+            </th>
+
+            <th>
+                Giá bán
+            </th>
+            <th>
+                Ngày cập nhật
+            </th>
+            <th>
+                Hình
+            </th>
+            <th>
+                Số lần mua
+            </th>
+            <th>
+                Trạng Thái
+            </th>
+            <th>
+                Tồn kho
+            </th>
+            <th>
+                Sản phẩm mới
+            </th>
+            <th>
+                Các chức năng
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaSP)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSP)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaBan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayCapNhat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hinh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SolanMua)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrangThai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TonKho)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SPMoi)
+            </td>
+            <td>
+
+                @if(item.TrangThai == true)
+                {
+                    <a href="@Url.Action("Trạng thái","SanPham", new { id = item.MaSP })" class="btn btn-sm btn-success"><i class="fas fa-toggle-on"></i></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Trạng thái","SanPham", new { id = item.MaSP })" class="btn btn-sm btn-danger"><i class="fas fa-toggle-off"></i></a>
+                }
+
+                <a href="@Url.Action("Sửa","SanPham", new { id = item.MaSP })" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                <a href="@Url.Action("Chi tiết","SanPham", new { id = item.MaSP })" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>
+                <a href="@Url.Action("Xóa","SanPham", new { id = item.MaSP })" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+            }
+
+</table>
