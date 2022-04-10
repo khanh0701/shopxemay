@@ -16,7 +16,7 @@
     <link href="~/Areas/Admin/AssetsAD/css/sb-admin-2.min.css" rel="stylesheet" />
 
     <title>Admin shop xe</title>
-    @RenderSection("header", required: false)
+    @RenderSection("header", required: false);
 </head>
 
 <body id="page-top">
@@ -38,8 +38,8 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-           
-          
+
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -54,13 +54,13 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Danh mục</span>
+                    <span>Quản Lý</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">các danh mục:</h6>
+                        <h6 class="collapse-header">danh mục quản lý:</h6>
                         <a class="collapse-item" href="@Url.Action("Index", "SanPham")">Sản Phẩm</a>
-                        <a class="collapse-item" href="cards.html">Giỏ Hàng</a>
+                        <a class="collapse-item" href="@Url.Action("Index", "KhachHang")">Khách hàng</a>
                     </div>
                 </div>
             </li>
@@ -155,9 +155,11 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    
+                        
+                    @*<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                            <input  type="text" class="form-control bg-light border-0 small" placeholder="Nhập kí tự tìm kiếm"
                                    aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="button">
@@ -165,7 +167,9 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form>*@
+                        
+
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -328,7 +332,7 @@
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle"
                                      src="~/Areas/Admin/AssetsAD/img/undraw_profile.svg">
-                                
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -357,7 +361,7 @@
 
                 </nav>
                 <!-- End of Topbar -->
-             
+
                 @RenderBody()
 
             </div>
@@ -366,7 +370,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span> &copy; Shop Xe máy</span>
                     </div>
                 </div>
             </footer>
@@ -402,8 +406,10 @@
         </div>
     </div>
 
-  
-    @RenderSection("footer", required: false)
+
+    @RenderSection("footer", required: false);
+
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="~/Areas/Admin/AssetsAD/vendor/jquery/jquery.min.js"></script>
@@ -414,6 +420,9 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Areas/Admin/AssetsAD/js/sb-admin-2.min.js"></script>
+
+
+    @RenderSection("upload", required: false);
 
 </body>
 

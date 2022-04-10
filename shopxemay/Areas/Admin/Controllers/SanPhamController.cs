@@ -7,22 +7,34 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using shopxemay.Models;
-using shopxemay.DAO;
+using shopxemay.Library;
 
 namespace shopxemay.Areas.Admin.Controllers
 {
     public class SanPhamController : Controller
     {
-        SanPhamDAO sanphamDAO = new SanPhamDAO();
-
-        MyDBcontext db = new MyDBcontext();
-
+      private MyDBcontext db = new MyDBcontext();
 
         // GET: Admin/SanPham
-        public ActionResult Index()
+        public ActionResult Index(string SearchString)
         {
            
-            return View(sanphamDAO.Getlist("Index"));
+
+           if (SearchString == null)
+            {
+                var sanPhams = db.SanPhams.ToList();
+                 return View(sanPhams);
+
+            }
+
+            else 
+            {
+                var sanPham1 = db.SanPhams.Where(n => n.TenSP.Contains(SearchString)).ToList();  
+                   
+                return View(sanPham1);
+            }
+            
+           
         }
 
         // GET: Admin/SanPham/Details/5
@@ -32,7 +44,7 @@ namespace shopxemay.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SanPham sanPham = sanphamDAO.getRow(id);
+            SanPham sanPham = db.SanPhams.Find(id);
             if (sanPham == null)
             {
                 return HttpNotFound();
@@ -43,6 +55,7 @@ namespace shopxemay.Areas.Admin.Controllers
         // GET: Admin/SanPham/Create
         public ActionResult Create()
         {
+            ViewBag.MaSP = new SelectList(db.SanPhams, "MaSP", "TenSp");
             ViewBag.MaLoaiSP = new SelectList(db.LoaiSanPhams, "MaLoaiSP", "TenLoaiSP");
             ViewBag.MaNCC = new SelectList(db.NhaCungCaps, "MaNCC", "TenNCC");
             return View();
@@ -57,8 +70,27 @@ namespace shopxemay.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                sanphamDAO.Insert(sanPham);
-                
+                //xử lý thêm vào
+                if(sanPham.NgayCapNhat==null)
+                {
+                    sanPham.NgayCapNhat =DateTime.Now;
+                }
+                if (sanPham.SolanMua == null)
+                {
+                    sanPham.SolanMua = 0;
+                }
+                if (sanPham.NgayCapNhat == null)
+                {
+                    sanPham.NgayCapNhat = DateTime.Now;
+                }
+                if (sanPham.MoTa2 == null)
+                {
+                    sanPham.MoTa2 = "đang cập nhật";
+                }
+
+
+                db.SanPhams.Add(sanPham);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -74,8 +106,7 @@ namespace shopxemay.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SanPham sanPham = sanphamDAO.getRow(id);
-
+            SanPham sanPham = db.SanPhams.Find(id);
             if (sanPham == null)
             {
                 return HttpNotFound();
@@ -94,7 +125,8 @@ namespace shopxemay.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                sanphamDAO.Update(sanPham);
+                db.Entry(sanPham).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.MaLoaiSP = new SelectList(db.LoaiSanPhams, "MaLoaiSP", "TenLoaiSP", sanPham.MaLoaiSP);
@@ -109,8 +141,7 @@ namespace shopxemay.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SanPham sanPham = sanphamDAO.getRow(id);
-
+            SanPham sanPham = db.SanPhams.Find(id);
             if (sanPham == null)
             {
                 return HttpNotFound();
@@ -123,9 +154,9 @@ namespace shopxemay.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            SanPham sanPham = sanphamDAO.getRow(id);
-
-            sanphamDAO.Delete(sanPham);
+            SanPham sanPham = db.SanPhams.Find(id);
+            db.SanPhams.Remove(sanPham);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -138,22 +169,48 @@ namespace shopxemay.Areas.Admin.Controllers
             base.Dispose(disposing);
         }
 
+        public string ProcessUpload(HttpPostedFileBase file)
+        {
+            if (file == null)
+            {
+                return "";
+            }
+            file.SaveAs(Server.MapPath("~/Areas/Admin/AssetsAD/img/" + file.FileName));
+            return "/Areas/Admin/AssetsAD/img/" + file.FileName;
+        }
         public ActionResult TrangThai(int? id)
         {
-
             if (id == null)
             {
-                return RedirectToAction("Index", "SanPham");
+                
+                return RedirectToAction("Index", "SanPam");
             }
-             SanPham sanPham = sanphamDAO.getRow(id);
+            SanPham sanPham = db.SanPhams.Find(id);
             if (sanPham == null)
             {
-            return RedirectToAction("Index", "SanPham");
-            }
-            sanPham.TrangThai = (sanPham.TrangThai == true) ? false : true;
-            sanphamDAO.Update(sanPham);
-            return RedirectToAction("Index", "SanPham");
+                
 
+                return RedirectToAction("Index", "SanPam");
+
+            }
+            if (sanPham == null)
+            {
+                
+
+                return RedirectToAction("Index", "SanPam");
+
+            }
+            sanPham.TrangThai =(sanPham.TrangThai == true) ? false : true;
+            sanPham.NgayCapNhat = DateTime.Now;
+            db.SanPhams.Add(sanPham);
+            db.SaveChanges();       
+            return RedirectToAction("Index", "SanPam");
         }
+
+
+        
+
+        
+        
     }
 }
